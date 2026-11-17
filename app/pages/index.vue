@@ -137,24 +137,24 @@ const filteredMenu = computed(() => {
 
 <template>
   <UContainer>
-    <UPageCTA
-      title="Resto Ijo"
-      description="We've built a strong."
-      variant="outline"
-      class="my-5"
-    >
-      <template #links>
-        <UInput 
-        v-model="search"
-         placeholder="Cari menu.." />
-        <USelect
-          placeholder="Pilih kategori"
-          v-model="categoryFilter"
-          class="w-35"
-          :items="categories"
-        />
-      </template>
-    </UPageCTA>
+      <UPageCTA
+        title="Resto Ijo"
+        description="We've built a strong restaurant"
+        variant="outline"
+        class="my-5"
+      >
+        <template #links>
+          <UInput 
+          v-model="search"
+          placeholder="Cari menu.." />
+          <USelect
+            placeholder="Pilih kategori"
+            v-model="categoryFilter"
+            class="w-35"
+            :items="categories"
+          />
+        </template>
+      </UPageCTA>
 
     <UBlogPosts>
       <UBlogPost
