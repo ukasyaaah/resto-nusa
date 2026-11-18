@@ -1,24 +1,34 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: "admin-resource",
+  middleware: "admin",
+  title: "Users",
+  searchPlaceholder: "Search user's name",
+  navItems: [
+    { label: "All Users", icon: "i-lucide-users", to: "/admin/users" },
+    {
+      label: "Create User",
+      icon: "i-lucide-plus",
+      to: "/admin/users/create",
+    },
+  ],
+});
+const { search } = useDashboardSearch();
 import { h, resolveComponent } from "vue";
 import type { TableColumn } from "@nuxt/ui";
 import type { Column, Row } from "@tanstack/vue-table";
-import { useClipboard } from "@vueuse/core";
 
 const UButton = resolveComponent("UButton");
 const UBadge = resolveComponent("UBadge");
 const UDropdownMenu = resolveComponent("UDropdownMenu");
 
-const toast = useToast();
-const supabase = useSupabaseClient();
-type User = {
-  id: string;
-  name: String;
-  role: "admin" | "user";
-  email: String;
-  created_at: string;
-};
 
-const { data } = await useFetch<User[]>("/api/users");
+
+const { data, refresh } = await useFetch<User[]>("/api/users", {
+  method:'GET',
+  query: computed(() => ({ search: search.value })),
+});
+const { deleteUser } = useUserAction();
 
 const columns: TableColumn<User>[] = [
   {
@@ -103,7 +113,7 @@ function getRowItems(row: Row<any>) {
       icon: "i-lucide-pencil",
 
       onSelect() {
-        navigateTo(`/dashboard/users/edit/${row.original.id}`);
+        navigateTo(`/admin/users/edit/${row.original.id}`);
       },
     },
     {
@@ -111,7 +121,11 @@ function getRowItems(row: Row<any>) {
       color: "error",
       icon: "i-lucide-trash-2",
       async onSelect() {
-        await $fetch(`/api/users/${row.original.id}`, { method: "DELETE" });
+        await deleteUser({
+          name: row.original.name as string,
+          id: row.original.id,
+          refreshAction: refresh,
+        });
       },
     },
   ];

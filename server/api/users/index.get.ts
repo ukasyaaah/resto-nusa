@@ -1,12 +1,22 @@
-import { serverSupabaseClient } from "#supabase/server";
+export default defineEventHandler(async (event) => {
+  const { admin } = await requireAdmin(event);
 
-export default eventHandler(async (event) => {
-  await requireAdmin(event);
-  const client = await serverSupabaseClient(event);
+  const { search } = getQuery(event);
 
-  const { data } = await client
+  let query = admin
     .from("users")
-    .select("name, email, role, created_at");
+    .select("id, name, email, role, created_at")
+    .order("created_at", { ascending: false });
 
-  return data;
+  if (typeof search === "string" && search.trim()) {
+    query = query.ilike("name", `%${search.trim()}%`);
+  }
+
+  const { data: users, error } = await query;
+
+  if (error) {
+    throw createError({ statusCode: 500, statusMessage: error.message });
+  }
+
+  return users;
 });

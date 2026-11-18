@@ -2,6 +2,7 @@ import type { H3Event } from "h3";
 import {
   serverSupabaseUser,
   serverSupabaseServiceRole,
+
 } from "#supabase/server";
 
 /**
@@ -11,6 +12,7 @@ import {
  */
 export async function requireAdmin(event: H3Event) {
   const claims = await serverSupabaseUser(event);
+
   const adminId = claims?.sub;
   if (!adminId) {
     throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
@@ -24,7 +26,7 @@ export async function requireAdmin(event: H3Event) {
     .single();
 
   if (error || data?.role !== "admin") {
-    throw createError({ statusCode: 403, statusMessage: "Forbidden" });
+    throw createError({ statusCode: 404, statusMessage: "Not Found" });
   }
 
   return { adminId, admin };
