@@ -22,8 +22,6 @@ const UButton = resolveComponent("UButton");
 const UBadge = resolveComponent("UBadge");
 const UDropdownMenu = resolveComponent("UDropdownMenu");
 
-
-
 const { data, refresh } = await useFetch<User[]>("/api/users", {
   method:'GET',
   query: computed(() => ({ search: search.value })),
