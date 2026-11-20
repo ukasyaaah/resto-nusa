@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
-const { profile, fetchProfile } = useProfile();
+const { isAdmin, profile, fetchProfile } = useProfile();
 
 await fetchProfile();
 const logout = async () => {
@@ -32,7 +32,7 @@ const logout = async () => {
             @click="logout"
           />
           <UButton
-            v-if="profile?.role == 'admin'"
+            v-if="isAdmin"
             label="Admin Dashboard"
             to="/admin"
           />
