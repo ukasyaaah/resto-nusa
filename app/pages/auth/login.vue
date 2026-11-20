@@ -68,6 +68,7 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
       color: "primary",
       icon: "iconoir:thumbs-up",
     });
+    await fetchProfile()
     return await navigateTo("/");
   } catch (error: any) {
     toast.add({

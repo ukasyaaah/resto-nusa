@@ -19,6 +19,14 @@ export default defineNuxtConfig({
     },
   },
 
+    nitro: {
+    preset: "cloudflare-pages",
+    cloudflare: {
+      deployConfig: true,
+      nodeCompat: true,
+    },
+  },
+
   routeRules: {
     // Set layout for specific route
     "/admin/**": { appLayout: "admin" },
